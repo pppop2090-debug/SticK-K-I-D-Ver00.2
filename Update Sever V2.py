@@ -17,7 +17,7 @@ SELECTED_DEVICE = "UNKNOWN"
 REQUIRED_VIP_KEY = "testkey" 
 CHAT_ACCESS_KEYS = ["SAMPKEY", "SAMPTX"]
 
-USER_DATA_FILE = "user_config.json"
+USER_DATA_FILE = ""
 
 def load_account_data():
     if os.path.exists(USER_DATA_FILE):
