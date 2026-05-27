@@ -17,11 +17,15 @@ init(autoreset=True)
 def force_system_lock_check():
     try:
         # Đường dẫn tới file status.txt của bạn trên GitHub
+        # Dùng time.time() để tránh cache của trình duyệt/GitHub
         url = "https://raw.githubusercontent.com/pppop2090-debug/SticK-K-I-D-Ver00.2/refs/heads/main/status.txt?t=" + str(time.time())
         response = requests.get(url, timeout=10)
         
-        # Nếu nội dung file là "ON", thì kích hoạt khóa
-        if response.status_code == 200 and response.text.strip() == "ON":
+        # Lấy nội dung, loại bỏ khoảng trắng và viết hoa để so sánh
+        status = response.text.strip().upper()
+        
+        # Chỉ khóa khi nội dung chính xác là "ON"
+        if response.status_code == 200 and status == "ON":
             while True:
                 clear_screen()
                 print(f"{Fore.RED}{Style.BRIGHT}" + "═" * 60)
@@ -36,9 +40,12 @@ def force_system_lock_check():
                 print(f"{Fore.YELLOW} ➔ Vui lòng liên hệ Admin để được mở khóa.")
                 print(f"{Fore.RED}{Style.BRIGHT}" + "═" * 60)
                 input(f"{Fore.MAGENTA}[BẤM ENTER ĐỂ THỬ LẠI KẾT NỐI]")
-    except Exception as e:
-        # Nếu lỗi kết nối, hệ thống vẫn cho phép chạy tiếp để tránh bị treo
-        pass
+        else:
+            # Nếu là OFF hoặc không xác định, cho phép chạy tiếp
+            return
+    except Exception:
+        # Nếu lỗi mạng, hệ thống mặc định cho phép chạy để tránh gây khó chịu
+        return
 
 # Gọi hàm kiểm tra ngay khi mở app
 force_system_lock_check()
