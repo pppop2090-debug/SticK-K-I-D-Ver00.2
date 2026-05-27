@@ -12,49 +12,36 @@ from colorama import Fore, Back, Style, init
 init(autoreset=True)
 
 # ==========================================================================
-# HỆ THỐNG KHÓA PHIÊN BẢN CŨ TỪ XA (ĐÃ CẬP NHẬT TÍNH NĂNG KHÓA BẮT BUỘC)
+# HỆ THỐNG KHÓA HỆ THỐNG TỪ XA (TÍNH NĂNG MỚI: DÙNG STATUS.TXT)
 # ==========================================================================
-CURRENT_VERSION = "1.0.3"
-
-def force_update_check():
+def force_system_lock_check():
     try:
-        url = "https://raw.githubusercontent.com/pppop2090-debug/SticK-K-I-D-Ver00.2/refs/heads/main/version.json?t=" + str(time.time())
+        # Đường dẫn tới file status.txt của bạn trên GitHub
+        url = "https://raw.githubusercontent.com/pppop2090-debug/SticK-K-I-D-Ver00.2/refs/heads/main/status.txt?t=" + str(time.time())
         response = requests.get(url, timeout=10)
-        if response.status_code == 200:
-            data = response.json()
-            latest = str(data['latest_version']).strip()
-            current = str(CURRENT_VERSION).strip()
-            
-            if latest != current:
-                while True:
-                    clear_screen()
-                    print(f"{Fore.RED}{Style.BRIGHT}" + "═" * 60)
-                    print(f"{Fore.YELLOW}  ██████╗ ██╗    ██╗██████╗ ███████╗██████╗  █████╗ ")
-                    print(f"{Fore.YELLOW}  ██╔══██╗██║    ██║██╔══██╗██╔════╝██╔══██╗██╔══██╗")
-                    print(f"{Fore.YELLOW}  ██████╔╝██║    ██║██████╔╝█████╗  ██████╔╝███████║")
-                    print(f"{Fore.YELLOW}  ██╔═══╝ ██║    ██║██╔═══╝ ██╔══╝  ██╔══██╗██╔══██║")
-                    print(f"{Fore.YELLOW}  ██║     ╚██████╔╝██║     ███████╗██║  ██║██║  ██║")
-                    print(f"{Fore.RED}{Style.BRIGHT}" + "═" * 60)
-                    print(f"{Fore.CYAN} [!] THÔNG BÁO: PHIÊN BẢN HIỆN TẠI ĐÃ BỊ KHÓA!")
-                    print(f"{Fore.WHITE} ➔ Cũ: {current} | Mới nhất: {Fore.GREEN}{latest}")
-                    print(f"{Fore.YELLOW} ➔ Hệ thống yêu cầu cập nhật để tiếp tục sử dụng.")
-                    print(f"{Fore.RED}{Style.BRIGHT}" + "═" * 60)
-                    webbrowser.open(data['update_url'])
-                    input(f"{Fore.MAGENTA}[BẤM ENTER ĐỂ MỞ LẠI LINK TẢI BẢN {latest}]")
+        
+        # Nếu nội dung file là "ON", thì kích hoạt khóa
+        if response.status_code == 200 and response.text.strip() == "ON":
+            while True:
+                clear_screen()
+                print(f"{Fore.RED}{Style.BRIGHT}" + "═" * 60)
+                print(f"{Fore.YELLOW}  ██████╗ ██╗    ██╗██████╗ ███████╗██████╗  █████╗ ")
+                print(f"{Fore.YELLOW}  ██╔══██╗██║    ██║██╔══██╗██╔════╝██╔══██╗██╔══██╗")
+                print(f"{Fore.YELLOW}  ██████╔╝██║    ██║██████╔╝█████╗  ██████╔╝███████║")
+                print(f"{Fore.YELLOW}  ██╔═══╝ ██║    ██║██╔═══╝ ██╔══╝  ██╔══██╗██╔══██║")
+                print(f"{Fore.YELLOW}  ██║     ╚██████╔╝██║     ███████╗██║  ██║██║  ██║")
+                print(f"{Fore.RED}{Style.BRIGHT}" + "═" * 60)
+                print(f"{Fore.RED}{Style.BRIGHT} [!] CẢNH BÁO: HỆ THỐNG ĐANG BỊ ADMIN KHÓA!")
+                print(f"{Fore.WHITE} ➔ Mọi hoạt động của Launcher đã bị đình chỉ.")
+                print(f"{Fore.YELLOW} ➔ Vui lòng liên hệ Admin để được mở khóa.")
+                print(f"{Fore.RED}{Style.BRIGHT}" + "═" * 60)
+                input(f"{Fore.MAGENTA}[BẤM ENTER ĐỂ THỬ LẠI KẾT NỐI]")
     except Exception as e:
-        print(f"Lỗi kiểm tra cập nhật: {e}")
+        # Nếu lỗi kết nối, hệ thống vẫn cho phép chạy tiếp để tránh bị treo
+        pass
 
 # Gọi hàm kiểm tra ngay khi mở app
-force_update_check()
-
-def check_for_updates():
-    try:
-        github_url = "https://raw.githubusercontent.com/pppop2090-debug/SticK-K-I-D-Ver00.2/refs/heads/main/Update%20Sever%20V2.py"
-        response = requests.get(github_url, timeout=5)
-        if response.status_code == 200:
-            print(f"{Fore.GREEN}[!] Hệ thống đã kiểm tra: Đang sử dụng phiên bản mới nhất.")
-    except:
-        print(f"{Fore.RED}[!] Không thể kết nối tới máy chủ cập nhật GitHub.")
+force_system_lock_check()
 
 # ==========================================================================
 # KHỞI TẠO DỮ LIỆU CŨ
@@ -442,7 +429,6 @@ def run_samp_taixiu_tool():
 # ==========================================================================
 # KHỞI CHẠY HỆ THỐNG
 # ==========================================================================
-check_for_updates()
 system_auth_manager()
 print(Fore.RED + Style.BRIGHT + f"\n==================================================\n   LAUNCHER CONSOLE MULTI-GAME (UPDATE 2026)      \n   XIN CHÀO THÀNH VIÊN: {DATABASE_ACCOUNT['username'].upper()}\n==================================================")
 time.sleep(0.2)
