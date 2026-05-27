@@ -17,14 +17,17 @@ init(autoreset=True)
 def force_system_lock_check():
     try:
         # Đường dẫn tới file status.txt của bạn trên GitHub
-        # Dùng time.time() để tránh cache của trình duyệt/GitHub
-        url = "https://raw.githubusercontent.com/pppop2090-debug/SticK-K-I-D-Ver00.2/refs/heads/main/status.txt?t=" + str(time.time())
-        response = requests.get(url, timeout=10)
+        # Thêm biến cache_bust ngẫu nhiên để buộc hệ thống lấy file mới nhất từ GitHub
+        url = "https://raw.githubusercontent.com/pppop2090-debug/SticK-K-I-D-Ver00.2/refs/heads/main/status.txt?cache_bust=" + str(random.randint(1, 100000))
         
-        # Lấy nội dung, loại bỏ khoảng trắng và viết hoa để so sánh
+        # Thiết lập header để yêu cầu server không dùng cache
+        headers = {'Cache-Control': 'no-cache', 'Pragma': 'no-cache'}
+        response = requests.get(url, headers=headers, timeout=10)
+        
+        # Làm sạch nội dung file
         status = response.text.strip().upper()
         
-        # Chỉ khóa khi nội dung chính xác là "ON"
+        # Kiểm tra nội dung: Nếu file là "ON" thì mới khóa
         if response.status_code == 200 and status == "ON":
             while True:
                 clear_screen()
@@ -41,10 +44,10 @@ def force_system_lock_check():
                 print(f"{Fore.RED}{Style.BRIGHT}" + "═" * 60)
                 input(f"{Fore.MAGENTA}[BẤM ENTER ĐỂ THỬ LẠI KẾT NỐI]")
         else:
-            # Nếu là OFF hoặc không xác định, cho phép chạy tiếp
+            # Nếu status là OFF hoặc không kết nối được, hệ thống hoạt động bình thường
             return
     except Exception:
-        # Nếu lỗi mạng, hệ thống mặc định cho phép chạy để tránh gây khó chịu
+        # Nếu lỗi mạng, vẫn cho chạy để người dùng không bị kẹt
         return
 
 # Gọi hàm kiểm tra ngay khi mở app
