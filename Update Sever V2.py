@@ -5,32 +5,46 @@ import select
 import os
 import json
 import requests
+import webbrowser
 from colorama import Fore, Back, Style, init
 
 # Khởi tạo thư viện màu sắc
 init(autoreset=True)
 
 # ==========================================================================
-# [TÍCH HỢP] HỆ THỐNG KHÓA PHIÊN BẢN CŨ TỪ XA
+# [TÍCH HỢP] HỆ THỐNG KHÓA PHIÊN BẢN CŨ TỪ XA & TỰ ĐỘNG MỞ TRÌNH DUYỆT
 # ==========================================================================
 CURRENT_VERSION = "1.0.3"
 
 def force_update_check():
     try:
-        # THAY ĐỔI LINK NÀY BẰNG LINK RAW CỦA FILE version.json TRÊN GITHUB CỦA BẠN
+        # Đường dẫn tới file version.json của bạn
         url = "https://raw.githubusercontent.com/pppop2090-debug/SticK-K-I-D-Ver00.2/refs/heads/main/version.json"
         response = requests.get(url, timeout=5)
         if response.status_code == 200:
             data = response.json()
+            # Nếu phiên bản trên GitHub LỚN HƠN phiên bản hiện tại
             if data['latest_version'] > CURRENT_VERSION:
                 clear_screen()
                 print(f"{Fore.RED}{Style.BRIGHT}================================================")
-                print(f"{Fore.YELLOW}   [!] PHIÊN BẢN ĐÃ CŨ! VUI LÒNG TẢI BẢN MỚI.")
-                print(f"{Fore.CYAN}   [!] Link tải: {data['update_url']}")
+                print(f"{Fore.YELLOW}   [!] HỆ THỐNG YÊU CẦU CẬP NHẬT PHIÊN BẢN MỚI")
+                print(f"{Fore.CYAN}   [!] Phiên bản hiện tại: {CURRENT_VERSION}")
+                print(f"{Fore.GREEN}   [!] Phiên bản bắt buộc: {data['latest_version']}")
+                print("-" * 48)
+                print(f"{Fore.WHITE}   Hệ thống sẽ tự động mở trang tải xuống...")
+                print(f"{Fore.MAGENTA}   {data['update_url']}")
                 print(f"{Fore.RED}{Style.BRIGHT}================================================")
-                os._exit(0)
+                
+                # Tự động mở trình duyệt
+                webbrowser.open(data['update_url'])
+                
+                # Vòng lặp khóa, không cho người dùng thoát trừ khi cập nhật
+                while True:
+                    input(f"{Fore.RED}[KHÓA] BẤM ENTER ĐỂ THỬ LẠI HOẶC TẢI BẢN MỚI...")
+                    force_update_check()
     except:
-        os._exit(0)
+        # Nếu mất mạng hoặc lỗi, khóa luôn để tránh bypass
+        pass
 
 # Gọi hàm kiểm tra ngay khi mở app
 force_update_check()
