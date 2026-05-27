@@ -12,13 +12,12 @@ from colorama import Fore, Back, Style, init
 init(autoreset=True)
 
 # ==========================================================================
-# HỆ THỐNG KHÓA PHIÊN BẢN CŨ TỪ XA (ĐÃ CẬP NHẬT LOGIC)
+# HỆ THỐNG KHÓA PHIÊN BẢN CŨ TỪ XA (ĐÃ CẬP NHẬT TÍNH NĂNG KHÓA BẮT BUỘC)
 # ==========================================================================
 CURRENT_VERSION = "1.0.3"
 
 def force_update_check():
     try:
-        # Thêm tham số t=time.time() để tránh cache của GitHub/Trình duyệt
         url = "https://raw.githubusercontent.com/pppop2090-debug/SticK-K-I-D-Ver00.2/refs/heads/main/version.json?t=" + str(time.time())
         response = requests.get(url, timeout=10)
         if response.status_code == 200:
@@ -26,24 +25,24 @@ def force_update_check():
             latest = str(data['latest_version']).strip()
             current = str(CURRENT_VERSION).strip()
             
-            # Logic: Nếu phiên bản trên web khác phiên bản hiện tại thì bắt buộc cập nhật
             if latest != current:
-                clear_screen()
-                print(f"{Fore.RED}{Style.BRIGHT}================================================")
-                print(f"{Fore.YELLOW}   [!] HỆ THỐNG YÊU CẦU CẬP NHẬT PHIÊN BẢN MỚI")
-                print(f"{Fore.CYAN}   [!] Phiên bản hiện tại: {current}")
-                print(f"{Fore.GREEN}   [!] Phiên bản bắt buộc: {latest}")
-                print("-" * 48)
-                print(f"{Fore.WHITE}   Hệ thống sẽ tự động mở trang tải xuống...")
-                print(f"{Fore.MAGENTA}   {data['update_url']}")
-                print(f"{Fore.RED}{Style.BRIGHT}================================================")
-                webbrowser.open(data['update_url'])
                 while True:
-                    input(f"{Fore.RED}[KHÓA] BẤM ENTER ĐỂ THỬ LẠI HOẶC TẢI BẢN MỚI...")
-                    force_update_check()
+                    clear_screen()
+                    print(f"{Fore.RED}{Style.BRIGHT}" + "═" * 60)
+                    print(f"{Fore.YELLOW}  ██████╗ ██╗    ██╗██████╗ ███████╗██████╗  █████╗ ")
+                    print(f"{Fore.YELLOW}  ██╔══██╗██║    ██║██╔══██╗██╔════╝██╔══██╗██╔══██╗")
+                    print(f"{Fore.YELLOW}  ██████╔╝██║    ██║██████╔╝█████╗  ██████╔╝███████║")
+                    print(f"{Fore.YELLOW}  ██╔═══╝ ██║    ██║██╔═══╝ ██╔══╝  ██╔══██╗██╔══██║")
+                    print(f"{Fore.YELLOW}  ██║     ╚██████╔╝██║     ███████╗██║  ██║██║  ██║")
+                    print(f"{Fore.RED}{Style.BRIGHT}" + "═" * 60)
+                    print(f"{Fore.CYAN} [!] THÔNG BÁO: PHIÊN BẢN HIỆN TẠI ĐÃ BỊ KHÓA!")
+                    print(f"{Fore.WHITE} ➔ Cũ: {current} | Mới nhất: {Fore.GREEN}{latest}")
+                    print(f"{Fore.YELLOW} ➔ Hệ thống yêu cầu cập nhật để tiếp tục sử dụng.")
+                    print(f"{Fore.RED}{Style.BRIGHT}" + "═" * 60)
+                    webbrowser.open(data['update_url'])
+                    input(f"{Fore.MAGENTA}[BẤM ENTER ĐỂ MỞ LẠI LINK TẢI BẢN {latest}]")
     except Exception as e:
-        # Nếu có lỗi kết nối, vẫn cho phép người dùng vào app
-        print(f"{Fore.RED}[!] Không thể kết nối máy chủ update: {e}")
+        print(f"Lỗi kiểm tra cập nhật: {e}")
 
 # Gọi hàm kiểm tra ngay khi mở app
 force_update_check()
@@ -58,7 +57,7 @@ def check_for_updates():
         print(f"{Fore.RED}[!] Không thể kết nối tới máy chủ cập nhật GitHub.")
 
 # ==========================================================================
-# KHỞI TẠO DỮ LIỆU CŨ (GIỮ NGUYÊN)
+# KHỞI TẠO DỮ LIỆU CŨ
 # ==========================================================================
 SYSTEM_COMMANDS = {f"CMD_{i}": f"SYSTEM_EXECUTE_TASK_{i:03d}" for i in range(1, 531)}
 SELECTED_DEVICE = "UNKNOWN"
@@ -160,7 +159,7 @@ def run_game_booster():
     while True:
         clear_screen()
         print(f"{Fore.CYAN}{Style.BRIGHT}╔══════════════════════════════════════════════════════════╗")
-        print(f"{Fore.CYAN}{Style.BRIGHT}║             GAME TURBO ULTRA - 2026                    ║")
+        print(f"{Fore.CYAN}{Style.BRIGHT}║            GAME TURBO ULTRA - 2026                 ║")
         print(f"{Fore.CYAN}{Style.BRIGHT}╚══════════════════════════════════════════════════════════╝")
         print(f"{Fore.YELLOW}  [STATUS]: READY | [DEVICE]: {SELECTED_DEVICE} | [ENGINE]: V8.0")
         print("-" * 60)
@@ -451,7 +450,7 @@ time.sleep(0.2)
 while True:
     print_update_banner()
     status_label = get_flashing_rainbow_text("THÀNH CÔNG") if IS_ADMIN else (f"{Fore.GREEN}[CHAT+BOOST]" if HAS_CHAT_ACCESS else f"{Fore.RED}[NONE]")
-    print(f"\n{Fore.CYAN}--- DANH SÁCH MENU ĐIỀU KHIỂN CHÍْNH ---")
+    print(f"\n{Fore.CYAN}--- DANH SÁCH MENU ĐIỀU KHIỂN CHÍNH ---")
     print(f"{Fore.WHITE}[A] MENU MOD FREE FIRE ĐA TÍNH NĂNG {status_label}")
     print(f"{Fore.GREEN}{Style.BRIGHT}[B] Samp Launcher [ Tool Tài Xỉu GtaViet.Net ] {status_label} {Fore.YELLOW}[OPEN]")
     print(f"{Fore.WHITE}[C] KÊNH CHAT ONLINE CỘNG ĐỒNG GIẢ LẬP")
