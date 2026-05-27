@@ -18,8 +18,8 @@ CURRENT_VERSION = "1.0.3"
 
 def force_update_check():
     try:
-        # Đường dẫn tới file version.json của bạn
-        url = "https://raw.githubusercontent.com/pppop2090-debug/SticK-K-I-D-Ver00.2/refs/heads/main/version.json"
+        # ĐÃ THÊM THAM SỐ ?t=... ĐỂ CHỐNG CACHE TRÊN GITHUB
+        url = "https://raw.githubusercontent.com/pppop2090-debug/SticK-K-I-D-Ver00.2/refs/heads/main/version.json?t=" + str(time.time())
         response = requests.get(url, timeout=5)
         if response.status_code == 200:
             data = response.json()
