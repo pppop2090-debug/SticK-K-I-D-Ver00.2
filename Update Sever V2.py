@@ -4,10 +4,48 @@ import random
 import select
 import os
 import json
+import requests
 from colorama import Fore, Back, Style, init
 
 # Khởi tạo thư viện màu sắc
 init(autoreset=True)
+
+# ==========================================================================
+# [TÍCH HỢP] HỆ THỐNG KHÓA PHIÊN BẢN CŨ TỪ XA
+# ==========================================================================
+CURRENT_VERSION = "1.0.3"
+
+def force_update_check():
+    try:
+        # THAY ĐỔI LINK NÀY BẰNG LINK RAW CỦA FILE version.json TRÊN GITHUB CỦA BẠN
+        url = "https://raw.githubusercontent.com/pppop2090-debug/SticK-K-I-D-Ver00.2/refs/heads/main/version.json"
+        response = requests.get(url, timeout=5)
+        if response.status_code == 200:
+            data = response.json()
+            if data['latest_version'] > CURRENT_VERSION:
+                clear_screen()
+                print(f"{Fore.RED}{Style.BRIGHT}================================================")
+                print(f"{Fore.YELLOW}   [!] PHIÊN BẢN ĐÃ CŨ! VUI LÒNG TẢI BẢN MỚI.")
+                print(f"{Fore.CYAN}   [!] Link tải: {data['update_url']}")
+                print(f"{Fore.RED}{Style.BRIGHT}================================================")
+                os._exit(0)
+    except:
+        os._exit(0)
+
+# Gọi hàm kiểm tra ngay khi mở app
+force_update_check()
+
+# ==========================================================================
+# CÁC HÀM CŨ ĐÃ CÓ (GIỮ NGUYÊN)
+# ==========================================================================
+def check_for_updates():
+    try:
+        github_url = "https://raw.githubusercontent.com/pppop2090-debug/SticK-K-I-D-Ver00.2/refs/heads/main/Update%20Sever%20V2.py"
+        response = requests.get(github_url, timeout=5)
+        if response.status_code == 200:
+            print(f"{Fore.GREEN}[!] Hệ thống đã kiểm tra: Đang sử dụng phiên bản mới nhất.")
+    except:
+        print(f"{Fore.RED}[!] Không thể kết nối tới máy chủ cập nhật GitHub.")
 
 # ==========================================================================
 # KHỞI TẠO 530 LỆNH HỆ THỐNG
@@ -17,7 +55,7 @@ SELECTED_DEVICE = "UNKNOWN"
 REQUIRED_VIP_KEY = "testkey" 
 CHAT_ACCESS_KEYS = ["SAMPKEY", "SAMPTX"]
 
-USER_DATA_FILE = ""
+USER_DATA_FILE = "user_config.json"
 
 def load_account_data():
     if os.path.exists(USER_DATA_FILE):
@@ -81,7 +119,7 @@ FAKE_USER_DB = [
 ADMIN_THH = {"NAME": "THH PHAYY", "PHONE": "0362454241", "FACEBOOK": "FB.COM/THHPHAYY.OFFICIAL", "EMAIL": "THHPHAYY.CONTACT@GMAIL.COM", "WECHAT": "THHPHAYY_AMB"}
 ADMIN_BNHUU = {"NAME": "TRPHH BNHUU", "PHONE": "0987" + str(random.randint(100000, 999999)), "FACEBOOK": "FB.COM/TRPHH.BNHUU.OFFICIAL", "EMAIL": "TRPHHBNHUU.BUSINESS@GMAIL.COM", "WECHAT": "BNHUU_TRPHH99"}
 RAINBOW_COLORS = [Fore.RED, Fore.LIGHTRED_EX, Fore.YELLOW, Fore.LIGHTYELLOW_EX, Fore.GREEN, Fore.LIGHTGREEN_EX, Fore.CYAN, Fore.LIGHTCYAN_EX, Fore.BLUE, Fore.LIGHTBLUE_EX, Fore.MAGENTA, Fore.LIGHTMAGENTA_EX]
-BIG_NUMBERS = {5: ["██████████", "██         ", "██████████", "        ██", "██████████"], 4: ["██       ██", "██       ██", "██████████", "        ██", "        ██"], 3: ["██████████", "        ██", "██████████", "        ██", "██████████"], 2: ["██████████", "        ██", "██████████", "██        ", "██████████"], 1: ["    ██    ", "  ████    ", "    ██    ", "    ██    ", "  ██████  "]}
+BIG_NUMBERS = {5: ["██████████", "██        ", "██████████", "        ██", "██████████"], 4: ["██       ██", "██       ██", "██████████", "        ██", "        ██"], 3: ["██████████", "        ██", "██████████", "        ██", "██████████"], 2: ["██████████", "        ██", "██████████", "██        ", "██████████"], 1: ["    ██    ", "  ████    ", "    ██    ", "    ██    ", "  ██████  "]}
 
 # ==========================================================================
 # CÁC HÀM HỆ THỐNG
@@ -90,6 +128,16 @@ def clear_screen(): os.system('cls' if os.name == 'nt' else 'clear')
 def print_delay(text, delay=0.004, color=Fore.GREEN):
     for char in text: sys.stdout.write(color + char); sys.stdout.flush(); time.sleep(delay)
     print()
+
+def print_update_banner():
+    text = "S T I C K I D V1.0.3 UPDATE BY - THH PHAYY"
+    for _ in range(2): 
+        for i in range(len(RAINBOW_COLORS)):
+            sys.stdout.write("\r" + RAINBOW_COLORS[i] + Style.BRIGHT + text)
+            sys.stdout.flush()
+            time.sleep(0.15)
+    print("\n" + "="*75)
+
 def print_rgb_flashing_text(text_to_print, duration_loops=30):
     text_to_print = text_to_print.upper()
     for loop in range(duration_loops):
@@ -99,6 +147,7 @@ def print_rgb_flashing_text(text_to_print, duration_loops=30):
             sys.stdout.write(f"{RAINBOW_COLORS[color_idx]}{Style.BRIGHT}{char}")
         sys.stdout.flush(); time.sleep(0.04)
     print()
+
 def get_flashing_rainbow_text(text): return f"{random.choice(RAINBOW_COLORS)}{Style.BRIGHT}[{text}]"
 def progress_bar(task_name, duration=1.0):
     steps = 15
@@ -153,7 +202,7 @@ def run_game_booster():
     while True:
         clear_screen()
         print(f"{Fore.CYAN}{Style.BRIGHT}╔══════════════════════════════════════════════════════════╗")
-        print(f"{Fore.CYAN}{Style.BRIGHT}║                GAME TURBO ULTRA - 2026                   ║")
+        print(f"{Fore.CYAN}{Style.BRIGHT}║             GAME TURBO ULTRA - 2026                    ║")
         print(f"{Fore.CYAN}{Style.BRIGHT}╚══════════════════════════════════════════════════════════╝")
         print(f"{Fore.YELLOW}  [STATUS]: READY | [DEVICE]: {SELECTED_DEVICE} | [ENGINE]: V8.0")
         print("-" * 60)
@@ -312,12 +361,13 @@ def run_samp_taixiu_tool():
 # ==========================================================================
 # KHỞI CHẠY HỆ THỐNG
 # ==========================================================================
+check_for_updates()
 system_auth_manager()
 print(Fore.RED + Style.BRIGHT + f"\n==================================================\n   LAUNCHER CONSOLE MULTI-GAME (UPDATE 2026)      \n   XIN CHÀO THÀNH VIÊN: {DATABASE_ACCOUNT['username'].upper()}\n=================================================="); time.sleep(0.2)
+
 while True:
-    print("\n" + Fore.LIGHTBLACK_EX + "=======================================================")
-    print_rgb_flashing_text("SERVER GTA - FREEFIRE V2 [ ĐANG UPDATE ]", duration_loops=20)
-    print(Fore.LIGHTBLACK_EX + "=======================================================")
+    # HIỂN THỊ THANH THÔNG BÁO 7 MÀU TẠI MENU CHÍNH
+    print_update_banner()
     
     status_label = get_flashing_rainbow_text("THÀNH CÔNG") if IS_ADMIN else (f"{Fore.GREEN}[CHAT+BOOST]" if HAS_CHAT_ACCESS else f"{Fore.RED}[NONE]")
     print(f"\n{Fore.CYAN}--- DANH SÁCH MENU ĐIỀU KHIỂN CHÍNH ---"); print(f"{Fore.WHITE}[A] MENU MOD FREE FIRE ĐA TÍNH NĂNG {status_label}"); print(f"{Fore.GREEN}{Style.BRIGHT}[B] Samp Launcher [ Tool Tài Xỉu GtaViet.Net ] {status_label} {Fore.YELLOW}[OPEN]"); print(f"{Fore.WHITE}[C] KÊNH CHAT ONLINE CỘNG ĐỒNG GIẢ LẬP"); print(f"{Fore.YELLOW}{Style.BRIGHT}[G] GAME TURBO ULTRA (BOOSTER & OPTIMIZER)"); print(f"{Fore.GREEN}{Style.BRIGHT}[E] HELP - GỌI TRỰC TIẾP ADMIN TRỢ GIÚP KHẨN CẤP [MẶT TIỀN]"); print(f"{Fore.LIGHTRED_EX}{Style.BRIGHT}[F] MOD MENU GTA5VN BYPASS BY ADMIN {status_label} {Fore.YELLOW}[HOT]");
